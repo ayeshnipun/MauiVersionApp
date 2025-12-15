@@ -25,9 +25,13 @@
 		<ApplicationId>com.companyname.mauiversionapp</ApplicationId>
 
 		<!-- Versions -->
-		<ApplicationDisplayVersion>$(GitVersion_MajorMinorPatch)</ApplicationDisplayVersion>
-		<ApplicationVersion>$(GitVersion_CommitsSinceVersionSource)</ApplicationVersion>
-		<ApplicationVersion Condition="'$(ApplicationVersion)' == '' Or '$(ApplicationVersion)' == '0'">1</ApplicationVersion>
+		 <ApplicationDisplayVersion>$(GitVersion_MajorMinorPatch)</ApplicationDisplayVersion>
+  <ApplicationVersion>$(GitVersion_WeightedPreReleaseNumber)</ApplicationVersion>
+
+  <ApplicationVersion
+    Condition="'$(ApplicationVersion)' == '' Or '$(ApplicationVersion)' == '0'">
+    1
+  </ApplicationVersion>
 
 		<!-- To develop, package, and publish an app to the Microsoft Store, see: https://aka.ms/MauiTemplateUnpackaged -->
 		<WindowsPackageType>None</WindowsPackageType>
