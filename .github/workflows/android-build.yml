@@ -35,11 +35,11 @@ jobs:
       - name: Dump MAUI output (diagnostic)
         run: |
           echo "==== BIN TREE ===="
-          find MauiVersionApp/bin -maxdepth 6 -type f
+          find bin -maxdepth 6 -type f
 
       - name: Upload Android APK
         uses: actions/upload-artifact@v4
         with:
           name: android-apk
-          path: MauiVersionApp/bin/**/net10.0-android/**/*.apk
+          path: bin/**/net10.0-android/**/*.apk
 
