@@ -1,0 +1,52 @@
+name: Build iOS App
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-ios:
+    runs-on: macos-latest
+    name: Build iOS App
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Required for GitVersion
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Install MAUI Workload
+        run: dotnet workload install maui-ios
+
+      - name: Install GitVersion Tool
+        run: dotnet tool install --global GitVersion.Tool
+
+      - name: Restore Dependencies
+        run: dotnet restore
+
+      - name: Calculate Version
+        id: version
+        run: |
+          VER=$(dotnet gitversion /showvariable MajorMinorPatch)
+          echo "VERSION=$VER" >> $GITHUB_ENV
+          # Simple version code generation: remove dots
+          CODE=$(echo $VER | tr -d '.')
+          echo "VERSION_CODE=$CODE" >> $GITHUB_ENV
+
+      - name: Build iOS App
+        # Note: Code signing is not configured. This will build unsigned/ad-hoc.
+        # ApplicationDisplayVersion maps to CFBundleShortVersionString
+        # ApplicationVersion maps to CFBundleVersion
+        run: dotnet build MauiVersionApp.csproj -f net10.0-ios -c Debug -p:ApplicationDisplayVersion=${{ env.VERSION }} -p:ApplicationVersion=${{ env.VERSION_CODE }}
+
+      - name: Upload iOS App
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-app
+          path: bin/**/net10.0-ios/**/*.app
