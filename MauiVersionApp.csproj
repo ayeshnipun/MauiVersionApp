@@ -19,6 +19,9 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
     <ApplicationId>com.companyname.mauiversionapp</ApplicationId>
+    
+    <!-- Suppress error NETSDK1147 / Xcode version mismatch for Preview .NET versions -->
+    <_SuppressSdkVersionCheck>true</_SuppressSdkVersionCheck>
 
 
 
