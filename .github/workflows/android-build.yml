@@ -24,11 +24,23 @@ jobs:
       - name: Install MAUI Workload
         run: dotnet workload install maui
 
+      - name: Install GitVersion Tool
+        run: dotnet tool install --global GitVersion.Tool
+
       - name: Restore Dependencies
         run: dotnet restore
 
+      - name: Calculate Version
+        id: version
+        run: |
+          VER=$(dotnet gitversion /showvariable MajorMinorPatch)
+          echo "VERSION=$VER" >> $GITHUB_ENV
+          # Simple version code generation: remove dots
+          CODE=$(echo $VER | tr -d '.')
+          echo "VERSION_CODE=$CODE" >> $GITHUB_ENV
+
       - name: Build Android APK
-        run: dotnet build MauiVersionApp.csproj -f net10.0-android -c Debug -p:AndroidPackageFormat=apk
+        run: dotnet build MauiVersionApp.csproj -f net10.0-android -c Debug -p:AndroidPackageFormat=apk -p:ApplicationDisplayVersion=${{ env.VERSION }} -p:ApplicationVersion=${{ env.VERSION_CODE }}
 
       - name: Upload Android APK
         uses: actions/upload-artifact@v4
