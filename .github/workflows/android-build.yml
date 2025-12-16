@@ -27,6 +27,9 @@ jobs:
       - name: Restore Dependencies
         run: dotnet restore
 
+      - name: Run GitVersion explicitly
+        run: dotnet gitversion /verbosity diagnostic
+
       - name: Build Android APK (Debug)
         run: dotnet build ./MauiVersionApp.csproj -f net10.0-android -c Debug /p:AndroidPackageFormat=apk
 
