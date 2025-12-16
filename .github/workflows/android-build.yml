@@ -1,49 +1,3 @@
-# name: Build Android APK
-
-# on:
-#   push:
-#     tags:
-#       - 'v*'
-
-# jobs:
-#   build-android:
-#     runs-on: macos-latest
-#     name: Build Android APK
-
-#     steps:
-#       - name: Checkout Repository
-#         uses: actions/checkout@v4
-#         with:
-#           fetch-depth: 0 # Required for GitVersion
-
-#       - name: Setup .NET SDK
-#         uses: actions/setup-dotnet@v4
-#         with:
-#           dotnet-version: '10.0.x'
-
-#       - name: Install MAUI Workload
-#         run: dotnet workload install maui
-
-#       - name: Restore Dependencies
-#         run: dotnet restore
-
-#       - name: Run GitVersion explicitly
-#         run: dotnet gitversion /verbosity diagnostic
-
-#       - name: Build Android APK (Debug)
-#         run: dotnet build ./MauiVersionApp.csproj -f net10.0-android -c Debug /p:AndroidPackageFormat=apk
-
-#       - name: Dump MAUI output (diagnostic)
-#         run: |
-#           echo "==== BIN TREE ===="
-#           find bin -maxdepth 6 -type f
-
-#       - name: Upload Android APK
-#         uses: actions/upload-artifact@v4
-#         with:
-#           name: android-apk
-#           path: bin/**/net10.0-android/**/*.apk
-
 name: Build Android APK
 
 on:
@@ -54,24 +8,30 @@ on:
 jobs:
   build-android:
     runs-on: macos-latest
+    name: Build Android APK
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 0 # Required for GitVersion
 
-      - uses: actions/setup-dotnet@v4
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '10.0.x'
 
-      - run: dotnet workload install maui
+      - name: Install MAUI Workload
+        run: dotnet workload install maui
 
-      - run: dotnet restore
+      - name: Restore Dependencies
+        run: dotnet restore
 
-      - run: dotnet build MauiVersionApp.csproj -f net10.0-android -c Debug -p:AndroidPackageFormat=apk
+      - name: Build Android APK
+        run: dotnet build MauiVersionApp.csproj -f net10.0-android -c Debug -p:AndroidPackageFormat=apk
 
-      - uses: actions/upload-artifact@v4
+      - name: Upload Android APK
+        uses: actions/upload-artifact@v4
         with:
           name: android-apk
           path: bin/**/net10.0-android/**/*.apk
-
