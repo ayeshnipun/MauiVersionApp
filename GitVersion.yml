@@ -1,5 +1,7 @@
+mode: Mainline
+tag-prefix: 'v'
 
 branches:
-  master:
-    regex: ^master$|main$
-    label: ''
+  main:
+    regex: ^main$
+    increment: Patch
