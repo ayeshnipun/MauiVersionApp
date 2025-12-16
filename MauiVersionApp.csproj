@@ -18,15 +18,11 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 
-		<!-- Display name -->
-		<ApplicationTitle>MauiVersionApp</ApplicationTitle>
+		<!-- Display version (what you see in Android settings) -->
+  <ApplicationDisplayVersion>$(GitVersion_MajorMinorPatch)</ApplicationDisplayVersion>
 
-		<!-- App Identifier -->
-		<ApplicationId>com.companyname.mauiversionapp</ApplicationId>
-
-		<!-- Versions -->
-		 <ApplicationDisplayVersion>$(GitVersion_MajorMinorPatch)</ApplicationDisplayVersion>
-  <ApplicationVersion>$(GitVersion_WeightedPreReleaseNumber)</ApplicationVersion>
+  <!-- Android versionCode MUST increase -->
+  <ApplicationVersion>$(GitVersion_MajorMinorPatch.Replace('.', ''))</ApplicationVersion>
 
   <ApplicationVersion
     Condition="'$(ApplicationVersion)' == '' Or '$(ApplicationVersion)' == '0'">
