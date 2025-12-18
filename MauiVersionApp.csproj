@@ -67,23 +67,31 @@
     Manually invoke GitVersion to ensure we get the version before Android manifest generation.
     We use 'exec' because the MSBuild task target is difficult to rely on for early execution order.
   -->
-  <Target Name="SetMauiVersion" BeforeTargets="PrepareForBuild">
-    <!-- Get Version string -->
-    <Exec Command="dotnet gitversion /showvariable MajorMinorPatch" ConsoleToMSBuild="true" StandardOutputImportance="Low" IgnoreExitCode="true">
-      <Output TaskParameter="ConsoleOutput" PropertyName="GV_Version" />
-    </Exec>
+  <Target Name="SetMauiVersion"
+        BeforeTargets="_GenerateAndroidManifest;PrepareForBuild">
 
-    <PropertyGroup>
-      <GV_Version Condition="'$(GV_Version)' == ''">1.0.0</GV_Version>
-      
-      <Version>$(GV_Version)</Version>
-      <ApplicationDisplayVersion>$(GV_Version)</ApplicationDisplayVersion>
-      <ApplicationVersion>$(GV_Version.Replace('.', ''))</ApplicationVersion>
-      
-      <!-- Safe fallback for integer conversion if something went wrong -->
-      <ApplicationVersion Condition="!$([System.Text.RegularExpressions.Regex]::IsMatch('$(ApplicationVersion)', '^\d+$'))">1</ApplicationVersion>
-    </PropertyGroup>
-    
-    <Message Text="Updated MAUI Versions -- Version: $(Version), Display: $(ApplicationDisplayVersion), VersionCode: $(ApplicationVersion)" Importance="High" />
-  </Target>
+  <Exec Command="dotnet gitversion /showvariable MajorMinorPatch"
+        ConsoleToMSBuild="true"
+        IgnoreExitCode="true">
+    <Output TaskParameter="ConsoleOutput" PropertyName="GV_Version" />
+  </Exec>
+
+  <PropertyGroup>
+    <GV_Version Condition="'$(GV_Version)' == ''">1.0.0</GV_Version>
+
+    <ApplicationDisplayVersion>$(GV_Version)</ApplicationDisplayVersion>
+
+    <!-- Android versionCode must be int -->
+    <ApplicationVersion>$([System.String]::Copy('$(GV_Version)').Replace('.', ''))</ApplicationVersion>
+
+    <ApplicationVersion
+      Condition="!$([System.Text.RegularExpressions.Regex]::IsMatch('$(ApplicationVersion)', '^\d+$'))">
+      1
+    </ApplicationVersion>
+  </PropertyGroup>
+
+  <Message Importance="High"
+           Text="MAUI Version → $(ApplicationDisplayVersion) / $(ApplicationVersion)" />
+</Target>
+
 </Project>
