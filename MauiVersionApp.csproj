@@ -67,7 +67,7 @@
     Manually invoke GitVersion to ensure we get the version before Android manifest generation.
     We use 'exec' because the MSBuild task target is difficult to rely on for early execution order.
   -->
-  <Target Name="SetMauiVersion"
+  <!-- <Target Name="SetMauiVersion"
         BeforeTargets="_GenerateAndroidManifest;PrepareForBuild">
 
   <Exec Command="dotnet gitversion /showvariable MajorMinorPatch"
@@ -92,6 +92,6 @@
 
   <Message Importance="High"
            Text="MAUI Version → $(ApplicationDisplayVersion) / $(ApplicationVersion)" />
-</Target>
+</Target> -->
 
 </Project>
