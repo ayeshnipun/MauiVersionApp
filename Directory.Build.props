@@ -1,9 +1,0 @@
-<Project>
-  <PropertyGroup>
-    <!-- GitVersion → MAUI -->
-    <ApplicationDisplayVersion>$(GitVersion_MajorMinorPatch)</ApplicationDisplayVersion>
-
-    <!-- Android versionCode must be int -->
-    <ApplicationVersion>$(GitVersion_WeightedPreReleaseNumber)</ApplicationVersion>
-  </PropertyGroup>
-</Project>
